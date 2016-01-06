@@ -1,0 +1,329 @@
+\documentclass[12pt,b5paper,openright,twoside]{book}
+\usepackage{blindtext}
+\usepackage{microtype}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{enumerate}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{algorithm}% http://ctan.org/pkg/algorithm
+\usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
+\usepackage{graphicx}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\setlength{\parindent}{4em}
+\setlength{\parskip}{1em}
+%\usepackage{geometry}
+%\geometry{
+% b5paper
+% }
+\setcounter{chapter}{3}
+\renewcommand{\thechapter}{\Alph{chapter}} 
+%\title{BAB 13}
+%\author{muhammadwidyan36 }
+%\date{January 2016}
+
+%\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{lmodern}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Sharelatex Example},
+    pdfpagemode=FullScreen,
+    }
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\small\ttfamily\color{black},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\urlstyle{same}
+
+\begin{document}
+
+%\maketitle
+\chapter{Debugging}
+%\section{Tujuan}
+
+Strategi \textit{debugging} terbaik tergantung pada jenis \textit{error} yang Anda miliki:
+\begin{enumerate}
+    \item Kesalahan sintaks yang dihasilkan oleh \textit{compiler} dan menunjukkan bahwa ada sesuatu yang salah dengan sintaks program. Contoh: tidak ada titik koma pada akhir pernyataan.
+    \item Exceptions digunakan jika terjadi kesalahan saat program sedang berjalan. Contoh: sebuah rekursi yang tak berhingga akhirnya menyebabkan \textit{StackOverflowException}.
+    \item Kesalahan logika menyebabkan program untuk melakukan hal yang salah. Contoh: sebuah ekspresi tidak dapat dievaluasi dalam urutan yang Anda harapkan, menghasilkan hasil yang tak terduga.
+\end{enumerate}
+
+Bagian berikut ini dikelompokkan berdasarkan tipe kesalahan; beberapa teknik sangat berguna untuk lebih dari satu tipe.
+
+\section{Syntax errors}
+Tipe yang bagus dari debugging adalah tipe dimana Anda tidak perlu melakukannya karena Anda menghindari membuat \textit{error} di baris pertama. Pada bagian sebelumnya, saya menyarankan strategi development yang meminimalkan \textit{error} dan membuatnya mudah menemukan \textit{error} ketika Anda membuat program. Kuncinya adalah untuk memulai dengan membuat suatu program dan menambah sedikit kode pada suatu waktu. Ketika terjadi \textit{error}, Anda akan mengetahui di mana itu. \par 
+
+\noindent Namun demikian, Anda mungkin dapat menemukan cara anda sendiri di salah satu situasi berikut. Untuk setiap situasi, saya membuat beberapa saran tentang bagaimana untuk memprosesnya.
+
+\noindent \textbf{Compiler memberikan pesan kesalahan.}
+
+\noindent Jika \textit{compiler} memberikan melaporkan 100 pesan kesalahan, itu tidak berarti ada 100 kesalahan dalam program Anda. Ketika \textit{compiler} menemukan kesalahan, akan menunjukan di baris program untuk sementara waktu. Mencoba untuk memulihkan setelah kesalahan pertama, tapi kadang-kadang melaporkan kesalahan palsu.
+Hanya pesan kesalahan pertama yang benar-benar dapat diandalkan. Saya menyarankan agar Anda hanya memperbaiki satu \textit{error} pada satu waktu, dan kemudian mengkompilasi ulang program. Anda mungkin akan menemukan "fixes" 100 errors.
+
+\noindent \textbf{Saya mendapatkan pesan compiler aneh dan tidak bisa hilang.}
+
+\noindent Pertama-tama, bacalah pesan \textit{error} dengan hati-hati. Hal ini ditulis dalam jargon singkat, tetapi hati-hati selalu ada informasi kernel yang tersembunyi
+Jika tidak ada yang lain, pesan akan memberitahu Anda di mana masalah terjadi dalam program ini. Sebenarnya, ia memberitahu Anda di mana saat \textit{compiler} melihat masalah itu terjadi, dan belum tentu itu adalah \textit{error}. Gunakan informasi \textit{compiler} sebagai panduan, tetapi jika Anda tidak melihat \textit{error} di mana \textit{compiler} menunjuknya, perluaslah pencarian.
+
+Umumnya \textit{error} akan berada pada lokasi sebelum pesan \textit{error} tersebut, tetapi ada kasus di mana ia akan berada di tempat lain sama sekali. Misalnya, jika Anda mendapatkan pesan kesalahan pada pemanggilan \textit{method}, kesalahan sebenarnya mungkin dalam pemanggilan \textit{method}.
+Jika Anda tidak menemukan \textit{error} dengan cepat, ambil napas dalam dan lihatlah lebih luas di seluruh bagian program. Pastikan penulisan program ini menjorok dengan benar; yang membuatnya lebih mudah untuk menemukan kesalahan sintaks.
+Sekarang, mulai mencari kesalahan umum:
+\begin{enumerate}
+    \item Periksa semua kurung dan kurung yang sejajar dan bersarang adalah benar. Semua definisi \textit{method} harus bersarang di dalam kelas. Semua statement program harus berada dalam \textit{method}.
+    \item Ingatlah bahwa huruf besar tidak sama dengan huruf kecil.
+    \item Periksa titik koma pada akhir pernyataan (dan tidak ada titik koma setelah kurung kurawal).
+    \item Pastikan bahwa setiap string dalam kode memiliki tanda kutip yang cocok. Pastikan bahwa Anda menggunakan tanda kutip ganda untuk Strings dan tanda kutip tunggal untuk karakter.
+    \item Untuk setiap penginisialisasian, pastikan bahwa jenis di sebelah kiri adalah sama dengan jenis di sebelah kanan. Pastikan bahwa ekspresi di sebelah kiri adalah nama variabel atau sesuatu yang lain yang dapat Anda berikan nilai.
+    \item Untuk setiap \textit{method}, pastikan bahwa argumen yang Anda berikan adalah dalam urutan yang benar, dan memiliki jenis yang benar, dan bahwa objek Anda yang memanggil \textit{method} tersebut adalah jenis yang tepat.
+    \item Jika Anda memanggil \textit{method} dengan pengembalian nilai, pastikan Anda melakukan sesuatu dengan hasil kembaliannya. Jika Anda memanggil \textit{method void}, pastikan Anda tidak mencoba untuk melakukan sesuatu dengan hasilnya.
+    \item Jika Anda memanggil \textit{method} objek, pastikan Anda melakukannya pada sebuah objek dengan tipe yang tepat. Jika Anda memanggil class \textit{method} dari luar kelas di mana itu adalah didefinisikan, pastikan Anda menentukan nama kelasnya.
+    \item Di dalam \textit{method} objek Anda dapat merujuk ke variabel tanpa menentukan obyek. Jika Anda mencoba bahwa dalam class \textit{method}, Anda mendapatkan pesan seperti, " Static reference to non-static variable" 
+\end{enumerate}
+
+\noindent Jika tidak ada yang berhasil, lanjutkan ke bagian berikutnya ...
+
+\noindent \textbf{Saya tidak bisa mendapatkan program saya untuk melakukan kompilasi tidak peduli apa yang harus saya lakukan.}
+
+\noindent Jika \textit{compiler} mengatakan ada kesalahan dan Anda tidak melihatnya, itu mungkin karena Anda dan \textit{compiler} tidak melihat kode yang sama. Periksa \textit{development environment} Anda untuk memastikan program yang Anda edit adalah program yang sedang di kompilasi oleh \textit{compiler}. Jika Anda tidak yakin, cobalah letakan dengan jelas dan berilah sintaks \textit{error} yang tepat pada awal program. Sekarang lakukan kompilasi lagi. Jika \textit{compiler} tidak me- nemukan \textit{error} baru, mungkin ada sesuatu yang salah dengan cara Anda mengatur \textit{development environment}.
+
+\noindent Jika Anda telah meneliti kode secara menyeluruh, dan Anda yakin \textit{compiler} mengkompilasi kode yang tepat, saatnya untuk tindakan selanjutnya: \textit{debugging} dengan \textit{bisection}.
+\begin{enumerate}
+    \item Membuat salinan file yang sedang Anda kerjakan. Jika Anda bekerja pada Bob.java, membuat salinan disebut Bob.java.old.
+    \item Hapus sekitar setengah kode dari Bob.java. Coba kompilasi lagi.
+    \begin{itemize}
+        \item Jika program mengkompilasi sekarang, Anda tahu error ada di setengah lainnya. Kembalikan lagi sekitar setengah dari kode yang Anda hapus dan ulangi.
+        \item Jika program masih tidak mengkompilasi, error harus dalam setengah kode ini. Hapus sekitar setengah dari kode dan ulangi.
+    \end{itemize}
+    \item Setelah Anda telah menemukan dan memperbaiki error, mulai kembalikan lagi kode yang Anda hapus, sedikit demi sedikit.
+\end{enumerate}
+
+\noindent Proses ini tidak begitu baik, tapi itu berjalan lebih cepat dari yang Anda pikirkan, dan itu lumayan handal.
+
+\noindent \textbf{Saya melakukan apa yang compiler katakan kepada saya untuk dilakukan, tetapi tetap tidak berhasil}.
+
+\noindent Beberapa pesan compiler muncul dengan saran, seperti "class Golfer must be declared abstract. It does not define int compareTo(java.lang.Object) from interface java.lang.Comparable." terlihat seperti \textit{compiler} memberitahu Anda untuk mendeklarasikan class Golfer sebagai kelas abstrak, dan jika Anda membaca buku ini, Anda mungkin tidak tahu apa itu atau bagaimana melakukannya.
+
+\noindent Untungnya, \textit{compiler} itu salah. Solusi dalam hal ini adalah untuk memastikan Golfer memiliki method yang disebut \textbf{compareTo} yang mengambil sebuah Obyek sebagai parameter.
+Jangan biarkan \textit{compiler} menuntun Anda dengan salah. Pesan \textit{error} memberikan bukti bahwa ada sesuatu yang salah, tetapi solusi yang mereka sarankan tidak dapat diandalkan.
+
+\section{D.2 Run-time errors}
+
+\noindent \textbf{Program Saya hangs.}
+
+\noindent Jika sebuah program berhenti dan tampaknya tidak melakukan apa-apa, kita mengatakan itu \textit{hanging}. Sering itu berarti bahwa itu berada dalam perulangan yang tak berhingga.
+\begin{enumerate}
+    \item Jika ada perulangan tertentu yang Anda menduga masalahnya, tambahkan \textit{statement print} segera sebelum \textit{loop} yang mengatakan "entered loop" dan setelah itu "existing the loop." Jalankan program. Jika Anda mendapatkan pesan pertama dan tidak mendapatkan pesan yang kedua, Anda memiliki masalah dengan \textit{infinite loop} (perulangan tak berhingga). Silahkan lihat ke bagian yang berjudul "Infinite loop."
+    \item Sebagian besar \textit{infinite recursion} akan menyebabkan program dapat menjalankannya untuk sementara waktu dan kemudian menghasilkan \textit{StackOverflowException}. Jika itu terjadi, silahkan lihat ke bagian yang berjudul "Infinite recursion." Jika Anda tidak mendapatkan \textit{StackOverflowException}, tapi Anda menduga ada masalah dengan \textit{method} rekursif, Anda masih dapat menggunakan teknik di dalam bagian \textit{infinite recursion}.
+    \item Jika tak satu pun saran membantu, Anda mungkin tidak mengerti \textit{flow} yang dieksekusi dalam program Anda. Silahkan lihat ke bagian yang berjudul "Flow of eksecution."
+\end{enumerate}
+
+\noindent \textbf{Infinite loop}
+
+\noindent Jika Anda berpikir Anda memiliki masalah \textit{infinite loop} dan Anda tahu yang mana \textit{loop} itu, tambah \textit{statement print} pada akhir \textit{loop} yang mencetak nilai dari variabel dalam kondisi, dan nilai kondisi.
+Contohnya : 
+\begin{lstlisting}
+while (x > 0 && y < 0) { 
+    // do something to x // do something to y
+    System.out.println("x: " + x); System.out.println("y: " + y); System.out.println("condition: " + (x > 0 && y < 0));
+}
+\end{lstlisting}
+
+\noindent Sekarang ketika Anda menjalankan program Anda melihat tiga baris output untuk setiap kali melalukan \textit{loop}. Terakhir kali melewati \textit{loop}, kondisi harus \textbf{false}. Jika \textit{loop} terus terjadi, Anda akan melihat nilai-nilai x dan y dan Anda mungkin melihat angkanya mengapa tidak diperbarui dengan benar.
+
+\noindent \textbf{Infinite recursion}
+
+\noindent Sebagian besar \textit{infinite recursion} akan menyebabkan program untuk memberikan \textit{StackOverflowException}. Tapi jika program lambat mungkin akan memakan waktu lama untuk mengisi stack.
+Jika Anda tahu \textit{method} yang menyebabkan \textit{infinite recursion}, periksa bahwa ada kasus dasar. Harus ada beberapa kondisi yang membuat \textit{method} kembali tanpa membuat rekursif. Jika tidak, Anda perlu memikirkan kembali algoritma dan mengidentifikasi kasus dasar.
+
+\noindent Jika ada kasus dasar, tetapi program tampaknya tidak mencapai itu, tambah \textit{statement print} pada awal \textit{method} yang mencetak parameter. Sekarang ketika Anda menjalankan program Anda melihat beberapa baris output setiap kali \textit{method} ini dipanggil, dan Anda melihat nilai-nilai parameter. Jika parameter tidak bergerak ke arah kasus dasar, Anda mungkin akan melihat mengapa tidak.
+
+\noindent \textbf{Flow of execution}
+
+\noindent Jika Anda tidak yakin bagaimana \textit{flow of execution} pada program Anda, tambahkan \textit{statement print} pada awal setiap \textit{method} dengan pesan seperti " entering method foo" di mana foo adalah nama \textit{method}.
+
+\noindent Sekarang ketika Anda menjalankan program cobalah untuk mencetak alur(\textit{stack}) dari setiap \textit{method} yang dipanggil. Anda juga dapat mencetak argumen setiap \textit{method} yang diterima. Ketika Anda menjalankan program, periksa apakah nilai tersebut wajar, dan periksa salah satu yang paling umum.
+
+\noindent \textbf{Ketika saya menjalankan program saya mendapatkan Exception.}
+
+\noindent Ketika \textit{exception} terjadi, Java mencetak pesan yang mencakup nama \textit{exception}, baris program di mana masalah terjadi, dan kumpulan jejak/alur. Jejak stack termasuk \textit{method} yang berjalan, \textit{method} yang dipanggil itu, \textit{method} yang dipanggil itu, dan selanjutnya.
+
+\noindent Langkah pertama adalah untuk memeriksa tempat dalam program di mana \textit{error} terjadi dan lihat apakah Anda tahu apa yang terjadi.
+\textbf{NullPointerException}: Anda mencoba untuk mengakses variabel, memanggil \textit{method} pada objek yang saat ini kosong. Anda harus melihat variabel mana yang null dan kemudian lihatlah bagaimana harus menjadi seperti itu. Ingatlah bahwa ketika Anda mendeklarasikan variabel dengan jenis objek, itu awalnya kosong sampai Anda memberikan nilai untuk objek itu. Sebagai contoh, kode ini menyebabkan \textit{NullPointerException}:
+\begin{lstlisting}
+Point blank;
+System.out.println(blank.x);
+\end{lstlisting}
+
+\noindent \textbf{ArrayIndexOutOfBoundsException} : Indeks yang Anda gunakan untuk mengakses sebuah array adalah sebaiknya negatif atau lebih besar dari array.length-1. Jika Anda menemukan di mana masalahnya, tambah \textit{statement print} segera sebelum mencetak nilai indeks dan panjang array. Apakah nilai panjang array tepat? Apakah nilai indeks tepat?
+
+\noindent Sekarang lakukan dengan cara Anda melihat ke bagian sebelumnya melalui program dan lihat di mana array dan indeks berasal. Temukan \textit{assignment statement}  terdekat dan lihat apakah itu adalah hal yang benar. Jika salah satu parameter, disimpan ke tempat di mana \textit{method} ini dipanggil dan lihat darimana nilai itu berasal.
+
+\noindent \textbf{StackOverFlowException}:Lihat "Infinite recursion."
+
+\noindent \textbf{FileNotFoundException}: Ini berarti Java tidak me- nemukan file yang dicari. Jika Anda menggunakan \textit{environment development} berbasis proyek seperti Eclipse, Anda mungkin harus mengimport file ke dalam proyek. Jika tidak pastikan file yang dicari ada dan bahwa alurnya benar. Masalah ini tergantung pada file sistem Anda, sehingga dapat menjadi sulit untuk dilacak
+
+\noindent \textbf{ArithmeticException}: Terjadi ketika sesuatu berjalan salah selama operasi aritmatika, paling sering melakukan proses pembagian dengan nol..
+
+\noindent \textbf{Saya menambahkan begitu banyak statement print dan saya mendapatkan output yang terlalu banyak.}
+
+\noindent Salah satu masalah dengan menggunakan \textit{statement print} untuk \textit{debugging} adalah bahwa Anda dapat berakhir dengan output yang begitu banyak. Ada dua cara untuk memproses: 
+baik menyederhanakan output atau menyederhanakan program.
+
+Untuk menyederhanakan output, Anda dapat menghapus atau komentar \textit{statement print} yang tidak membantu, atau menggabungkan mereka, atau format output sehingga lebih mudah untuk memahami. Ketika Anda mengembangkan sebuah program, Anda harus menulis kode dengan ringkas.
+
+Untuk menyederhanakan program. Misalnya, jika Anda menyortir array, mengurutkan array. Jika program mengambil input dari user, berikan inputan sederhana yang tidak menyebabkan error.
+
+Juga, bersihkan kode. Hapus kode yang tidak terpakai dan atur penulisan kode programnya agar mudah untuk dibacanya. Misalnya, jika Anda menduga bahwa kesalahan adalah di bagian \textit{deeply-nested} program, tulis ulang bagian tersebut dengan struktur yang sederhana. Jika Anda menduga \textit{method} yang lebih besar, bagilah menjadi \textit{method} yang lebih kecil dan uji mereka secara terpisah.
+
+Proses untuk pencarian minimal uji kasus secara sering dapat menyebabkan Anda mendapatkan \textit{bug}. Misalnya, jika Anda temukan bahwa program bekerja ketika array memiliki jumlah elemen, tetapi tidak ketika memiliki angka ganjil, itu dapat memberikan petunjuk tentang apa yang sedang terjadi.
+
+Atur kembali program dapat membantu Anda menemukan \textit{bug}-nya. Jika Anda membuat perubahan yang Anda pikir tidak membawa efek perubahan pada program, itu akan membuat Anda sia-sia.
+
+\section{Logic errors}
+
+\noindent \textbf{Program Saya tidak bekerja}
+
+\noindent Kesalahan logika sulit untuk ditemukan karena \textit{compiler} dan \textit{system run-time} tidak memberikan informasi tentang apa yang salah. Hanya Anda yang tahu apa program yang seharusnya dilakukan, dan hanya Anda yang tahu bahwa itu tidak dilakukannya.
+Langkah pertama adalah buat hubungan antara kode dengan hal yang biasa Anda dapatkan. Anda memerlukan hipotesis tentang apa program ini benar-benar berjalan. Berikut adalah beberapa pertanyaan untuk ditujukan kepada Anda sendiri :
+\begin{enumerate}
+    \item Apakah ada suatu program yang seharusnya dilakukan, tetapi tampaknya tidak terjadi? temukan bagian dari kode tersebut yang mengeksekusi fungsi itu dan pastikan sudah mengeksekusi ketika Anda pikir seharusnya. Lihat " Flow of execution " di atas.
+    \item Apakah terjadi sesuatu tetapi seharusnya tidak terjadi? Cari kode dalam program Anda yang mengeksekusi fungsi itu dan melihat apakah kode tersebut mengeksekusi ketika seharusnya tidak.
+    \item Apakah kode program mengeksekusi hal yang tidak terduga? Pastikan Anda memahami kode, terutama jika itu memanggil \textit{method} Java. Baca dokumentasi untuk method – method itu, dan coba dengan uji kasus sederhana. \textit{method} tersebut mungkin tidak melakukan apa yang Anda pikir mereka lakukan.
+\end{enumerate}
+
+\noindent Untuk program, Anda butuh \textit{method} apa yang kode Anda butuhkan. Jika tidak melakukan apa yang Anda harapkan, masalahnya mungkin tidak pada program; mungkin di pikiran Anda.
+
+Cara terbaik untuk memperbaiki \textit{method} kode Anda adalah memecahkan program menjadi komponen (biasanya kelas dan \textit{method}) dan uji mereka secara independen. Setelah Anda temukan perbedaan, Anda dapat memecahkan masalah.
+Berikut adalah beberapa \textit{common logic error} untuk diteliti:
+\begin{enumerate}
+    \item Ingat bahwa pembagian dengan \textit{integer} selalu dibulatkan ke bawah. Jika Anda ingin hasil pecahan, gunakan \textit{double}.
+    \item Angka \textit{floating point} hanya perkiraan, sehingga tidak bergantung pada akurasi sempurna.
+    \item lebih umumnya, menggunakan \textit{integer} untuk hal yang dihitung dan \textit{floating point} untuk hal terukur
+    \item Jika Anda menggunakan \textit{assignment operator} (=) bukan operator kesetaraan (==) dalam kondisi if, while, atau for statement, Anda mungkin secara sintaks benar dan secara semantik salah.
+    \item Ketika Anda menerapkan operator kesetaraan (==) suatu objek, itu cek identitas dari objek tersebut. Jika Anda bermaksud untuk memeriksa kesetaraan, Anda harus menggunakan \textit{method} yang sama.
+    \item Jika Anda ingin berbeda gagasan kesetaraan, Anda harus menulis ulang itu.
+    \item \textit{Inrehitence} dapat menyebabkan \textit{logic error}, karena Anda dapat menjalankan kode inrehited tanpa menyadarinya. Lihat "Flow of Execution" di atas.
+\end{enumerate}
+
+\noindent \textbf{Saya punya penulisan kode tidak teratur dan tidak melakukan apa yang saya inginkan}.
+
+\noindent Menulis kode yang kompleks tidak apa-apa selama masih dapat dibaca, tapi itu akan sulit untuk di \textit{debug}. Kadang hal ini adalah ide yang bagus untuk memecahkan masalah yang kompleks kedalam serangkaian variabel sementara.
+Contohnya :
+\begin{lstlisting}
+rect.setLocation(rect.getLocation().translate( -rect.getWidth(), -rect.getHeight()));
+\end{lstlisting}
+
+\noindent Dapat ditulis seperti dibawah ini : 
+\begin{lstlisting}
+int dx = -rect.getWidth(); 
+int dy = -rect.getHeight(); 
+Point location = rect.getLocation(); 
+Point newLocation = location.translate(dx, dy); rect.setLocation(newLocation);
+\end{lstlisting}
+
+\noindent Versi eksplisit lebih mudah untuk dibaca, karena nama-nama variabel sudah menyediakan dokumentasi tambahan, dan lebih mudah untuk di \textit{debug}, karena Anda dapat memeriksa jenis variabel sementara dan menampilkan nilai-nilainya.
+Masalah lain yang dapat terjadi dengan penulisan yang komplex adalah bahwa urutan evaluasi mungkin tidak seperti apa yang Anda harapkan. Misalnya, untuk mengevaluasi x 2 $\pi$, Anda mungkin menulis
+
+\begin{lstlisting}
+double y = x / 2 * Math.PI;
+\end{lstlisting}
+
+\noindent Itu tidak benar, karena perkalian dan pembagian memiliki urutan yang sama, dan mereka dievaluasi dari kiri ke kanan. Penulisan kode ini menghitung x $\pi$ / 2.
+Jika Anda tidak yakin dengan urutan operasinya, gunakan tanda kurung untuk membuatnya eksplisit. 
+
+\begin{lstlisting}
+double y = x / (2 * Math.PI);
+\end{lstlisting}
+
+\noindent Versi yang ini benar, dan lebih mudah dibaca bagi orang lain yang belum hafal urutan operasi.
+
+\noindent \textbf{Method saya tidak mengembalikan nilai apa yang saya harus lakukan} .
+
+\noindent Jika Anda memiliki \textit{return statement} dengan ekspresi yang kompleks, Anda akan memiliki kesulitan untuk mencetak nilainya saat sebelum melakukan pengembalian nilai. Sekali lagi, Anda dapat menggunakan variabel sementara. Misalnya, seperti dibawah ini :
+\begin{lstlisting}
+public Rectangle intersection(Rectangle a, Rectangle b) { 
+    return new Rectangle( Math.min(a.x, b.x), Math.min(a.y, b.y), Math.max(a.x+a.width, b.x+b.width)-Math.min(a.x, b.x), Math.max(a.y+a.height, b.y+b.height)-Math.min(a.y, b.y) ); 
+}
+\end{lstlisting}
+
+\noindent Ubahlah menjadi seperti dibawah ini :
+\begin{lstlisting}
+public Rectangle intersection(Rectangle a, Rectangle b) { 
+    int x1 = Math.min(a.x, b.x); 
+    int y2 = Math.min(a.y, b.y); 
+    int x2 = Math.max(a.x+a.width, b.x+b.width); int y2 = Math.max(a.y+a.height, b.y+b.height); 
+    Rectangle rect = new Rectangle(x1, y1, x2-x1, y2-y1); 
+    return rect; 
+}
+\end{lstlisting}
+
+\noindent Sekarang Anda memiliki kesempatan untuk menampilkan salah satu variabel sementara sebelum dilakukannya proses pengembalian nilai. Dan dengan menggunakan variabel x1 dan y1, Anda membuat kode yang lebih sederhana juga.
+
+\noindent \textbf{Statement Print saya tidak menampilkan apa-apa.}
+
+\noindent Jika Anda menggunakan \textit{method} println, output akan ditampilkan secara langsung, tetapi jika Anda menggunakan print (setidaknya di beberapa kejadian) output akan disimpan tanpa ditampilkan hingga baris berikutnya. Jika program berakhir tanpa mencetak baris baru, Anda mungkin tidak pernah melihat outputnya
+Jika Anda menduga bahwa hal ini terjadi, ubah beberapa atau semua \textit{statement print} menjadi println.
+
+\noindent \textbf{Saya benar-benar terjebak dan saya butuh bantuan.}
+
+\noindent Pertama, cobalah menjauh dari komputer selama beberapa menit. Komputer memancarkan gelombang yang mempengaruhi otak, menyebabkan gejala berikut:
+\begin{enumerate}
+    \item Frustrasi dan kemarahan.
+    \item Berfikir Takhayul ("komputer membenci saya") dan pemikiran magis ("program hanya bekerja ketika saya memakai topi saya mundur").
+    \item Mabuk ("Program ini lumpuh pula").
+\end{enumerate}
+
+\noindent Jika Anda menderita gejala-gejala tersebut, bangunlah dan berjalan-jalan. Ketika Anda tenang, berpikir tentang program. Apa yang dilakukan? Apa kemungkinan penyebab perilaku itu? Kapan terakhir kali Anda memiliki program kerja, dan apa yang Anda lakukan selanjutnya?
+
+\noindent Kadang-kadang hanya membutuhkan waktu untuk menemukan bug. Saya sering menemukan bug ketika saya membiarkan pikiran tenang. Hal yang baik untuk menemukan bug adalah kereta, mandi, dan tidur.
+
+\noindent \textbf{Tidak, saya benar-benar membutuhkan pertolongan.}
+
+\noindent Itu terjadi. Bahkan pemrogrammer terbaik bisa \textit{stack}. Kadang Anda perlu menyegarkan mata Anda. Sebelum Anda membawa orang lain untuk membantu Anda, pastikan Anda telah mencoba teknik yang dijelaskan di atas. Program Anda harus sesederhana mungkin. Anda harus memiliki \textit{print statement} di tempat yang tepat (dan output yang mereka hasilkan harus dipahami). Anda harus memahami masalah dengan baik untuk menggambarkan hal itu secara ringkas.
+Ketika Anda membawa seseorang untuk membantu, beri mereka informasi yang mereka butuhkan.
+\begin{enumerate}
+    \item Apa jenis bug itu? Sintaks, run-time, atau logika?
+    \item Apa hal terakhir yang Anda lakukan sebelum kesalahan ini terjadi? Apa baris terakhir dari kode yang Anda tulis, atau apakah ada uji kasus yang baru saja gagal?
+    \item Jika bug terjadi pada saat kompilasi atau run-time, apa pesan kesalahannya?, dan apa bagian dari program yang tidak berjalan dengan baik?
+    \item Apa yang telah Anda coba, dan apa yang telah Anda pelajari?
+\end{enumerate}
+
+\noindent Pada saat Anda menjelaskan masalah dengan seseorang, Anda mungkin melihat jawabannya. Fenomena ini sangat umum bahwa beberapa orang merekomendasikan teknik \textit{debugging} ini. disebut cara kerja "rubber ducking" bebek karet:
+\begin{enumerate}
+    \item Belilah bebek karet.
+    \item Ketika Anda benar-benar terjebak pada masalah, tempatkanlah bebek karet di meja di depan Anda dan berkatalah, "bebek karet, saya terjebak dalam masalah. Inilah yang terjadi ... "
+    \item Jelaskan masalahnya kepada bebek karet.
+    \item Lihat solusinya.
+    \item Terima kasih bebek karet.
+\end{enumerate}
+
+\noindent \textbf{Saya menemukan Bug nya.}
+
+\noindent Ketika Anda temukan \textit{bug}-nya, biasanya jelas bagaimana menyelesaikan itu. Tapi tidak selalu. Kadang-kadang apa yang tampaknya menjadi \textit{bug} benar-benar merupakan indikasi bahwa Anda tidak memahami program, atau ada kesalahan dalam algoritma Anda. Dalam kasus ini, Anda mungkin harus memikirkan kembali algoritmanya. Luangkan waktu jauh dari komputer untuk berpikir, bekerja melalui uji kasus, atau menggambar diagram untuk melakukan perhitungan manual.
+Setelah Anda menyelesaikan \textit{bug} itu, tidak hanya mulai membuat kesalahan baru. Luangkan waktu sebentar untuk berpikir tentang apa jenis \textit{bug} itu, mengapa Anda membuat kesalahan, bagaimana kesalahan itu terjadi, dan apa yang Anda bisa lakukan untuk bisa menemukan \textit{bug} itu lebih cepat. Saat Anda melihat sesuatu yang mirip, Anda akan mampu menemukan \textit{bug} itu lebih cepat.
+
+\end{document}
